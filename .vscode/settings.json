@@ -1,3 +1,10 @@
 {
-    "python.pythonPath": "/home/spectre/.local/share/virtualenvs/Airbnb-L1HV5nCb/bin/python"
+    "python.pythonPath": "/home/spectre/.local/share/virtualenvs/Airbnb-L1HV5nCb/bin/python",
+    "python.linting.pylintEnabled": false,
+    "python.linting.flake8Enabled": true,
+    "python.linting.enabled": true,
+    "python.formatting.provider": "black",
+    "python.linting.flake8Args": [
+        "--max-line-length=88"
+    ]
 }
