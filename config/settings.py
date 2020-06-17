@@ -43,9 +43,11 @@ PROJECT_APP = [
     "users.apps.UsersConfig",
     "rooms.apps.RoomsConfig",
     "core.apps.CoreConfig",
+    "django_countries",
 ]
 
 INSTALLED_APPS = DJANGO_APP + PROJECT_APP
+
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
