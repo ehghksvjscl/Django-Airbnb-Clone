@@ -44,6 +44,7 @@ PROJECT_APP = [
     "rooms.apps.RoomsConfig",
     "core.apps.CoreConfig",
     "django_countries",
+    "reviews.apps.ReviewsConfig",
 ]
 
 INSTALLED_APPS = DJANGO_APP + PROJECT_APP
