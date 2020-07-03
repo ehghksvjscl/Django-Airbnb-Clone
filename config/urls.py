@@ -23,5 +23,6 @@ urlpatterns = [
 ]
 
 # 개발 보드 settings 파일에 DEBUG Ture
+# 이미지가
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
