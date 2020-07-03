@@ -57,7 +57,7 @@ class Photo(core_models.TimeStampedModel):
     """ Photo Objdect Definition """
 
     caption = models.CharField(max_length=80)
-    file = models.ImageField()
+    file = models.ImageField(upload_to="room_photos")
 
     # Photo가 위에 있는데도 아래에 있는 Room class를 사용하고 싶다면 문자열로 만들면 된다.
     room = models.ForeignKey("Room", related_name="photos", on_delete=models.CASCADE)

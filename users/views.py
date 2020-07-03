@@ -1,3 +1,9 @@
+import jsonn
+from django.views import View
+from django.http import JsonResponse
 from django.shortcuts import render
 
-# Create your views here.
+
+class MainView(View):
+    def get(self, request):
+        return JsonResponse({"Hello": "World"}, status=200)
