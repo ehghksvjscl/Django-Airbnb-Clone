@@ -94,6 +94,11 @@ class Room(core_models.TimeStampedModel):
     facilities = models.ManyToManyField(Facility, related_name="rooms", blank=True)
     house_rules = models.ManyToManyField(HouseRule, related_name="rooms", blank=True)
 
+    # super은 상속하는데 부모의 기능을 살리는 기능이다 부모 + 자식 기능을 모두 할 수 있다.
+    def save(self, *args, **kwargs):
+        self.city = str.capitalize(self.city)
+        super().save(*args, **kwargs)
+
     # Admin에 보여줄 텍스트 정의
     def __str__(self):
         return self.name

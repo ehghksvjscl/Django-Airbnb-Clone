@@ -14,6 +14,7 @@ class ItemAdmin(admin.ModelAdmin):
         return obj.rooms.count()
 
 
+# models에 정의된 photo를 똑똑한 장고가 연걸해서 여러개 사진이 올라가도록 할 수 있다? Good
 class PhotoInline(admin.TabularInline):
 
     model = models.Photo
@@ -29,7 +30,7 @@ class RoomAdmin(admin.ModelAdmin):
     fieldsets = (
         (
             "Basic Info",
-            {"fields": ("name", "description", "country", "address", "price")},
+            {"fields": ("name", "description", "country", "city", "address", "price")},
         ),
         ("Times", {"fields": ("check_in", "check_out", "instant_book")},),
         (
