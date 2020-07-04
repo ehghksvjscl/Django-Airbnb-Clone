@@ -1,5 +1,6 @@
 from django.core.management.base import BaseCommand, no_translations
 from django_seed import Seed
+from django.contrib.admin.utils import flatten
 from users import models as user_models
 from rooms import models as room_models
 import random
@@ -29,6 +30,7 @@ class Command(BaseCommand):
         room_type = room_models.RoomType.objects.all()
 
         # 파람 : class , 반복수 , 제외할 대상의 값{딕셔너리}
+        # 각각의 값들을 함수를 만들어 컨트롤 하는 것도 가능합니다.
         seeder.add_entity(
             room_models.Room,
             number,
@@ -44,5 +46,23 @@ class Command(BaseCommand):
             },
         )
         # seed 실행
-        seeder.execute()
+        # 마지막
+
+        """ 1 이상한 모양을 정리하고
+            2 생성된 등록한 룸을 반복으로 돌리고
+            3 기본키로 room을 찾고
+            4 루프를 돌면서 3개 ~ 17까지 포토를 넣어준다.
+        """
+        create_photo = seeder.execute()
+        # print(list(create_photo.values())[0])
+        create_clean = flatten(list(create_photo.values())[0])
+        # print(create_clean)
+        for pk in create_clean:
+            room = room_models.Room.objects.get(pk=pk)
+            for i in range(3, random.randint(10, 17)):
+                room_models.Photo.objects.create(
+                    caption=seeder.faker.sentence(),
+                    file=f"/room_photos/{random.randint(1,31)}.webp",
+                    room=room,
+                )
         self.stdout.write(self.style.SUCCESS(("Rooms created")))
