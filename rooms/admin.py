@@ -40,6 +40,7 @@ class RoomAdmin(admin.ModelAdmin):
                 "fields": ("amenities", "facilities", "house_rules"),
             },
         ),
+        ("Last Detail", {"fields": ("host",)}),
         ("Spaces", {"fields": ("guests", "beds", "bedrooms", "baths",)}),
     )
 

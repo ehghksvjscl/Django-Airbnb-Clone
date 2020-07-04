@@ -93,7 +93,7 @@ DATABASES = {
     }
 }
 
-
+THIRD_PARTY_APPS = ["django_countries", "django_seed"]
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
 
