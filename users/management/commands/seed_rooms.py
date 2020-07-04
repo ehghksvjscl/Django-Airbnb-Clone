@@ -56,6 +56,9 @@ class Command(BaseCommand):
         create_photo = seeder.execute()
         # print(list(create_photo.values())[0])
         create_clean = flatten(list(create_photo.values())[0])
+        amenaties = room_models.Amenity.objects.all()
+        facilities = room_models.Facility.objects.all()
+        house_rouls = room_models.HouseRule.objects.all()
         # print(create_clean)
         for pk in create_clean:
             room = room_models.Room.objects.get(pk=pk)
@@ -65,4 +68,17 @@ class Command(BaseCommand):
                     file=f"/room_photos/{random.randint(1,31)}.webp",
                     room=room,
                 )
+            for a in amenaties:
+                magic_number = random.randint(0, 15)
+                if magic_number % 2 == 0:
+                    room.amenities.add(a)
+            for f in facilities:
+                magic_number = random.randint(0, 15)
+                if magic_number % 2 == 0:
+                    room.facilities.add(f)
+            for h in house_rouls:
+                magic_number = random.randint(0, 15)
+                if magic_number % 2 == 0:
+                    room.house_rules.add(h)
+
         self.stdout.write(self.style.SUCCESS(("Rooms created")))

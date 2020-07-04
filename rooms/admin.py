@@ -94,6 +94,7 @@ class RoomAdmin(admin.ModelAdmin):
     def count_photos(self, obj):
         return obj.photos.count()
 
+    count_photos.short_description = "Photo Count"
     # 관리자 패널에서 컬럼 이름 주기
     # count_amenities.short_description = "Hello sexy!"
 
