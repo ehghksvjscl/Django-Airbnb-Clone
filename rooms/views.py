@@ -87,15 +87,16 @@ class RoomDetail(DetailView):
 
 
 def search(request):
-    # search에서 form의 input에서준 city 값 받아오기
+    # search에서 form의 input에서준 city,country,room_type 값 받아오기
     city = request.GET.get("city", "Anywhere")
+    country = request.GET.get("country", "KR")
+    room_type = int(request.GET.get("room_type", 0))
     # 앞글자 대문자 만들기
     city = str.capitalize(city)
-    room_type = models.RoomType.objects.all()
+    room_types = models.RoomType.objects.all()
     print(request.GET)
 
-    return render(
-        request,
-        "rooms/search.html",
-        {"city": city, "countries": countries, "room_type": room_type},
-    )
+    form = {"city": city, "s_room_type": room_type, "s_country": country}
+    choices = {"countries": countries, "room_types": room_types, "country": country}
+
+    return render(request, "rooms/search.html", {**form, **choices})
