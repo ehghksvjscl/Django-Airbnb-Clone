@@ -89,14 +89,47 @@ class RoomDetail(DetailView):
 def search(request):
     # search에서 form의 input에서준 city,country,room_type 값 받아오기
     city = request.GET.get("city", "Anywhere")
+    city = str.capitalize(city)
     country = request.GET.get("country", "KR")
     room_type = int(request.GET.get("room_type", 0))
-    # 앞글자 대문자 만들기
-    city = str.capitalize(city)
-    room_types = models.RoomType.objects.all()
-    print(request.GET)
+    price = int(request.GET.get("price", 0))
+    guets = int(request.GET.get("guets", 0))
+    bedrooms = int(request.GET.get("bedrooms", 0))
+    beds = int(request.GET.get("beds", 0))
+    baths = int(request.GET.get("baths", 0))
+    instant = request.GET.get("instant", False)
+    super_host = request.GET.get("super_host", False)
+    s_amenities = request.GET.getlist("amenities")
+    s_facilities = request.GET.getlist("facilities")
+    # print(f"{s_amenities}, {s_facilities}")
 
-    form = {"city": city, "s_room_type": room_type, "s_country": country}
-    choices = {"countries": countries, "room_types": room_types, "country": country}
+    # 앞글자 대문자 만들기
+    room_types = models.RoomType.objects.all()
+
+    # ManyToMany 가져오는 방법 rooms/search.html을 참고 하면서 보시오!
+    amenities = models.Amenity.objects.all()
+    facilities = models.Facility.objects.all()
+    # print(request.GET)
+
+    form = {
+        "city": city,
+        "s_room_type": room_type,
+        "price": price,
+        "guets": guets,
+        "bedrooms": bedrooms,
+        "beds": beds,
+        "baths": baths,
+        "s_amenities": s_amenities,
+        "s_facilities": s_facilities,
+        "instant": instant,
+        "super_host": super_host,
+    }
+    choices = {
+        "countries": countries,
+        "room_types": room_types,
+        "country": country,
+        "amenities": amenities,
+        "facilities": facilities,
+    }
 
     return render(request, "rooms/search.html", {**form, **choices})
