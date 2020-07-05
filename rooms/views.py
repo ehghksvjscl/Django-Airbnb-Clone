@@ -2,8 +2,10 @@ from django.shortcuts import render, redirect
 from . import models
 from math import ceil  # 올림하는 함수
 from django.core.paginator import Paginator, EmptyPage
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
 from django.utils import timezone
+from django.urls import reverse
+from django.http import Http404
 
 # 페이지 랜더링 하는 fbv
 def all_rooms(request):
@@ -14,7 +16,7 @@ def all_rooms(request):
     # rooms = paginator.get_page(page) # 에러를 컨트롤 하고 싶지 않고 장고가 에러를 잡아주길 원하면 사용
     try:
         rooms = paginator.page(page)  # 페이지가 잘못 할당 되어 있을때 에러를 컨트롤 하고 싶다면 사용
-        return render(request, "rooms/home.html", {"pages": rooms})
+        # return render(request, "rooms/home.html", {"pages": rooms})
     except EmptyPage:
         return redirect("/")
 
@@ -59,6 +61,23 @@ class HomeView(ListView):
         return context
 
 
+# fbv
 def room_detail(request, pk):
-    print(pk)
-    return render(request, "rooms/detail.html")
+    # print("room_detail" end=""),print(pk)
+    try:
+        room = models.Room.objects.get(pk=pk)
+    except models.Room.DoesNotExist:
+        # 절대경로로 url 내보내기
+        # return redirect("/")
+
+        # 프로페션널 하게 리벌스 사용해서 namespace 찾아가기 자꾸 사용해서 손에 익히자
+        # return redirect(reverse("core:home"))
+        raise Http404()  # 404.html을 찾아가도록 만든다 꼭 템플릿 폴더 안에 있어여함
+
+    return render(request, "rooms/detail.html", {"room": room})
+
+
+# cbv
+class RoomDetail(DetailView):
+
+    model = models.Room
