@@ -18,7 +18,11 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
-urlpatterns = [path("admin/", admin.site.urls), path("", include("core.urls"))]
+urlpatterns = [
+    path("admin/", admin.site.urls),
+    path("", include("core.urls",namespace="core")),
+    path("rooms/", include("rooms.urls", namespace="rooms")),
+]
 
 # 개발 보드 settings 파일에 DEBUG Ture
 # 이미지
