@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block page_name %}home{% endblock page_name %}
+
+{% block content %}
+{% for room in rooms.object_list %}
+<h1>{{room.name}} / ${{room.price}}</h1>
+{% endfor %}
+
+
+{% if rooms.has_previous %}
+<a href="?page={{rooms.number|add:-1}}">◀ </a>
+{% endif %}
+
+{% for page in page_range %}
+<a href="?page{{page}}">{{page}}</a>
+{% endfor %}
+
+Page : {{rooms.number}} of {{rooms.paginator.num_pages}}
+
+{% if rooms.has_next %}
+<a href="?page={{rooms.number|add:1}}"> ▶</a>
+{% endif %}
+
+
+{% endblock content %}

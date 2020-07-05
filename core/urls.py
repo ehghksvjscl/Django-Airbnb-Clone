@@ -1,0 +1,5 @@
+from django.urls import path
+from rooms import views as room_veiw
+
+
+urlpatterns = [path("", room_veiw.all_rooms, name="home")]
