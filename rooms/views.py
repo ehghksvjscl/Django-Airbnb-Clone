@@ -90,15 +90,15 @@ def search(request):
     # search에서 form의 input에서준 city,country,room_type 값 받아오기
     city = request.GET.get("city", "Anywhere")
     city = str.capitalize(city)
-    country = request.GET.get("country", "KR")
+    s_country = request.GET.get("country", "KR")
     room_type = int(request.GET.get("room_type", 0))
     price = int(request.GET.get("price", 0))
-    guets = int(request.GET.get("guets", 0))
+    guests = int(request.GET.get("guests", 0))
     bedrooms = int(request.GET.get("bedrooms", 0))
     beds = int(request.GET.get("beds", 0))
     baths = int(request.GET.get("baths", 0))
-    instant = request.GET.get("instant", False)
-    super_host = request.GET.get("super_host", False)
+    instant = bool(request.GET.get("instant", False))
+    superhost = bool(request.GET.get("superhost", False))
     s_amenities = request.GET.getlist("amenities")
     s_facilities = request.GET.getlist("facilities")
     # print(f"{s_amenities}, {s_facilities}")
@@ -115,21 +115,76 @@ def search(request):
         "city": city,
         "s_room_type": room_type,
         "price": price,
-        "guets": guets,
+        "guests": guests,
+        "s_country": s_country,
         "bedrooms": bedrooms,
         "beds": beds,
         "baths": baths,
         "s_amenities": s_amenities,
         "s_facilities": s_facilities,
         "instant": instant,
-        "super_host": super_host,
+        "superhost": superhost,
     }
     choices = {
         "countries": countries,
         "room_types": room_types,
-        "country": country,
         "amenities": amenities,
         "facilities": facilities,
     }
 
-    return render(request, "rooms/search.html", {**form, **choices})
+    # Search 검색 조건 만들기
+    # https://docs.djangoproject.com/en/3.0/ref/models/querysets/
+    filter_args = {}
+    if city != "Anywhere":
+        filter_args["city__startswith"] = city
+
+    # 나라 조건
+    filter_args["country"] = s_country
+
+    # 방 타입 조건
+    if room_type != 0:
+        filter_args["room_type__pk"] = room_type
+
+    # 가격 조건
+    if price != 0:
+        filter_args["price__lte"] = price
+
+    # Guest 조건
+    if guests != 0:
+        filter_args["guests__gte"] = guests
+
+    # bedrooms 조건
+    if bedrooms != 0:
+        filter_args["bedrooms__gte"] = bedrooms
+
+    # beds 조건
+    if beds != 0:
+        filter_args["beds__gte"] = beds
+
+    # baths 조건
+    if baths != 0:
+        filter_args["baths__gte"] = baths
+
+    # instant 조건
+    if instant is True:
+        filter_args["instant_book"] = True
+
+    # superhost 조건
+    if superhost is True:
+        filter_args["host__superhost"] = True
+
+    # Amenitiy조건
+    if len(s_amenities) > 0:
+        for s_amenitiy in s_amenities:
+            filter_args["amenities__pk"] = int(s_amenitiy)
+
+    # Facilities 조건
+    if len(s_facilities) > 0:
+        for s_facility in s_facilities:
+            filter_args["facilities__pk"] = int(s_facility)
+
+    rooms = models.Room.objects.filter(**filter_args)
+    print(bool(instant), bool(superhost))
+    # print(s_country)
+
+    return render(request, "rooms/search.html", {**form, **choices, "rooms": rooms})

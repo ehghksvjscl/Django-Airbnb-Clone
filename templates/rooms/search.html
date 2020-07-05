@@ -41,8 +41,8 @@ Search
         <input value="{{price}}" type="number" id="price" name="price" placeholder="price">
     </div>
     <div>
-        <label for="guets">Gusets</label>
-        <input value="{{guets}}" type="number" id="guets" name="guets" placeholder="guets">
+        <label for="guests">Gusets</label>
+        <input value="{{guests}}" type="number" id="guests" name="guests" placeholder="guests">
     </div>
     <div>
         <label for="bedrooms">Bedrooms</label>
@@ -61,8 +61,8 @@ Search
         <input type="checkbox" id="instant" name="instant" {% if instant %}checked{% endif %}>
     </div>
     <div>
-        <label for="super_host">By Superhost Only?</label>
-        <input type="checkbox" id="super_host" name="super_host" {% if super_host %}checked{% endif %}>
+        <label for="superhost">By Superhost Only?</label>
+        <input type="checkbox" id="superhost" name="superhost" {% if superhost %}checked{% endif %}>
     </div>
     <div>
         <h3>Amenities</h3>
@@ -88,8 +88,11 @@ Search
             {% endfor %}
         </ul>
     </div>
-
     <button>Search</button>
-
 </form>
+
+{% for room in rooms  %}
+<h3>{{room}}</h3>
+{% endfor %}
+
 {% endblock content %}
