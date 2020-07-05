@@ -5,4 +5,7 @@ app_name = "rooms"
 # fbv
 # urlpatterns = [path("<int:pk>", views.room_detail, name="detail")]
 # cbv
-urlpatterns = [path("<int:pk>", views.RoomDetail.as_view(), name="detail")]
+urlpatterns = [
+    path("<int:pk>", views.RoomDetail.as_view(), name="detail"),
+    path("search", views.search, name="search"),
+]

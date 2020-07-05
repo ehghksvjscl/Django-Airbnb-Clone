@@ -16,7 +16,7 @@ def all_rooms(request):
     # rooms = paginator.get_page(page) # 에러를 컨트롤 하고 싶지 않고 장고가 에러를 잡아주길 원하면 사용
     try:
         rooms = paginator.page(page)  # 페이지가 잘못 할당 되어 있을때 에러를 컨트롤 하고 싶다면 사용
-        # return render(request, "rooms/home.html", {"pages": rooms})
+        return render(request, "rooms/home.html", {"pages": rooms})
     except EmptyPage:
         return redirect("/")
 
@@ -80,4 +80,15 @@ def room_detail(request, pk):
 # cbv
 class RoomDetail(DetailView):
 
+    """ RoomDetail Definition """
+
     model = models.Room
+
+
+def search(request):
+    # search에서 form의 input에서준 city 값 받아오기
+    city = request.GET.get("city")
+    # 앞글자 대문자 만들기
+    city = str.capitalize(city)
+    print(city)
+    return render(request, "rooms/search.html", {"city": city})
