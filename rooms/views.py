@@ -1,11 +1,12 @@
 from django.shortcuts import render, redirect
-from . import models
-from math import ceil  # 올림하는 함수
 from django.core.paginator import Paginator, EmptyPage
 from django.views.generic import ListView, DetailView
 from django.utils import timezone
 from django.urls import reverse
 from django.http import Http404
+from django_countries import countries
+from . import models
+from math import ceil  # 올림하는 함수
 
 # 페이지 랜더링 하는 fbv
 def all_rooms(request):
@@ -87,8 +88,14 @@ class RoomDetail(DetailView):
 
 def search(request):
     # search에서 form의 input에서준 city 값 받아오기
-    city = request.GET.get("city")
+    city = request.GET.get("city", "Anywhere")
     # 앞글자 대문자 만들기
     city = str.capitalize(city)
-    print(city)
-    return render(request, "rooms/search.html", {"city": city})
+    room_type = models.RoomType.objects.all()
+    print(request.GET)
+
+    return render(
+        request,
+        "rooms/search.html",
+        {"city": city, "countries": countries, "room_type": room_type},
+    )

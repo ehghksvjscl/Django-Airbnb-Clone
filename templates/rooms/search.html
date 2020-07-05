@@ -4,8 +4,38 @@
 Search
 {% endblock page_name %}
 
+{% block search-bar %}
+{% endblock search-bar %}
+
 {% block content %}
 
 <h2>Search {{city}}</h2>
+<form action="{% url "rooms:search" %}" method="GET">
+    <div>
+        <label for="city">City</label>
+        <input type="text" id="city" name="city" placeholder="Search by City" value="{{city}}">
+    </div>
 
+    <div>
+        <label for="country">Country</label>
+        <select id="country" name="country">
+            {% for country in countries %}
+            <option value="{{country.code}}">{{country.name}}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div>
+        <label for="roomtype">Room Types</label>
+        <select id="roomtype" name="room_type">
+            {% for type in room_type %}
+            <option value="{{type.id}}">{{type}}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div>
+        <button>Search</button>
+    </div>
+</form>
 {% endblock content %}
