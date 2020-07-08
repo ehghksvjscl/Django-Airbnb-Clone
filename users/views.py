@@ -1,9 +1,12 @@
-import jsonn
-from django.views import View
-from django.http import JsonResponse
 from django.shortcuts import render
+from django.views import View
+from . import forms
 
 
-class MainView(View):
+class LoginView(View):
     def get(self, request):
-        return JsonResponse({"Hello": "World"}, status=200)
+        form = forms.LoginForm()
+        return render(request, "users/login.html", {"form": form})
+
+    def post(self, request):
+        pass

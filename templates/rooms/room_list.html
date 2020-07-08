@@ -12,23 +12,23 @@
 {% for room in object_list %}
 <h1>
     <!-- <a href="/rooms/{{room.pk}}">{{room.name}} / ${{room.price}</a> -->
-    <a href="{% url "rooms:detail" room.pk %}">{{room.name}} / ${{room.price}</a>
-}</h1>
+    <a href="{% url "rooms:detail" room.pk %}">{{room.name}} / ${{room.price}}</a>
+</h1>
 {% endfor %}
 
 
 {% if page_obj.has_previous %}
 <a href="?page={{pages.previous_page_number}}">◀ </a>
-    {% endif %}
+{% endif %}
 
-    {% for page_obj in page_range %}
-    <a href="?page{{page}}">{{page}}</a>
-    {% endfor %}
+{% for page_obj in page_range %}
+<a href="?page{{page}}">{{page}}</a>
+{% endfor %}
 
-    Page : {{page_obj.number}} of {{page_obj.paginator.num_pages}}
+Page : {{page_obj.number}} of {{page_obj.paginator.num_pages}}
 
-    {% if object_list.has_next %}
-    <a href="?page={{pages.next_page_number}}"> ▶</a>
-    {% endif %}
+{% if object_list.has_next %}
+<a href="?page={{pages.next_page_number}}"> ▶</a>
+{% endif %}
 
-    {% endblock content %}
+{% endblock content %}

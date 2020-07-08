@@ -11,8 +11,10 @@ from math import ceil  # 올림하는 함수
 # 페이지 랜더링 하는 fbv
 def all_rooms(request):
     page = int(request.GET.get("page", 1))
+
     # 변수를 선언하고 all을 담으면 데이터 과부하가 되지 않는다 해당 변수를 사용할때 메모리에 올라간다.
     room_list = models.Room.objects.all()
+    # model = models.Room
     paginator = Paginator(room_list, 10, orphans=5)
     # rooms = paginator.get_page(page) # 에러를 컨트롤 하고 싶지 않고 장고가 에러를 잡아주길 원하면 사용
     try:
@@ -150,15 +152,24 @@ class SearchView(View):
                 for facility in facilities:
                     filter_args["facilities"] = facility
 
-                qs = rooms = models.Room.objects.filter(**filter_args)
+                qs = rooms = models.Room.objects.filter(**filter_args).order_by(
+                    "-created"
+                )
 
                 paginator = Paginator(qs, 10, orphans=5)
 
+                page = request.GET.get("pasge", 1)
+
+                rooms = paginator.get_page(page)
+                # print("Get으로 데이터 받는 형식, 검색조건 On")
+                return render(
+                    request, "rooms/searchform.html", {"form": form, "rooms": rooms}
+                )
         else:
-
             form = forms.SearchForm()
+            # print("빈폼으로 올때. 그냥 search페이지를 호출")
 
-        return render(request, "rooms/searchform.html", {"form": form, "rooms": rooms})
+        return render(request, "rooms/searchform.html", {"form": form})
 
 
 # def search(request):
