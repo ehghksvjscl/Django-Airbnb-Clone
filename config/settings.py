@@ -131,3 +131,13 @@ AUTH_USER_MODEL = "users.User"
 # 위 두가지 Media 기능을 설정 하면 media/
 MEDIA_ROOT = os.path.join(BASE_DIR, "uploads")
 MEDIA_URL = "/media/"
+
+# Email Configuration
+EMAIL_BACKEND = "django_smtp_ssl.SSLEmailBackend"
+MAILER_EMAIL_BACKEND = EMAIL_BACKEND
+EMAIL_HOST = "smtp.mailgun.org"
+EMAIL_PORT = 465
+EMAIL_USE_SSL = True
+EMAIL_HOST_USER = os.environ.get("MAILGUN_USERNAME")
+EMAIL_HOST_PASSWORD = os.environ.get("MAILGUN_PASSWORD")
+EMAIL_FROM = "sexy-guy@sandbox9891f38734f74490b5bcbff54dbee85c.mailgun.org"

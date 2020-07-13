@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "2d5d9c911ecbaf8e5238c604184bd08c6229769c5a4134209622648ad0916a38"
+            "sha256": "fe2c5138cab7dd41b0a163fa7aa61adc8fcf9b58c3568056389d7942b9b335d0"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -32,12 +32,27 @@
             "index": "pypi",
             "version": "==6.1.2"
         },
+        "django-dotenv": {
+            "hashes": [
+                "sha256:3812bb0f4876cf31f902aad140f0645e120e51ee30eb7c40c22050f58a0e4adb",
+                "sha256:a9b1b40a70bd321acd231926acedb9bd2c5e873e33a1873b34a7276d196a765e"
+            ],
+            "index": "pypi",
+            "version": "==1.4.2"
+        },
         "django-seed": {
             "hashes": [
                 "sha256:5cdda71dcd51b2e7340e4aec9035d99d7014409a4b11adddbdff17d814968221"
             ],
             "index": "pypi",
             "version": "==0.2.2"
+        },
+        "django-smtp-ssl": {
+            "hashes": [
+                "sha256:282863d5905e03686b6555ac788aa732842695d6f9cf1dcfa66d898abb7565d0"
+            ],
+            "index": "pypi",
+            "version": "==1.0"
         },
         "faker": {
             "hashes": [

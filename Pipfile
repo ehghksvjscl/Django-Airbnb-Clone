@@ -12,6 +12,8 @@ django = "==2.2.5"
 pillow = "*"
 django-countries = "*"
 django-seed = "*"
+django-dotenv = "*"
+django-smtp-ssl = "*"
 
 [requires]
 python_version = "3.6"
