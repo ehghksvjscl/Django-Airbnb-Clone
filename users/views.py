@@ -6,6 +6,7 @@ from django.views import View
 from django.contrib.auth import authenticate, login, logout
 from django.views.generic import FormView
 from django.urls import reverse_lazy
+from django.core.files.base import ContentFile
 
 from . import forms, models
 
@@ -141,6 +142,7 @@ def github_callback(request):
                             first_name=name,
                             username=email,
                             login_method=models.User.LOGIN_GITHUB,
+                            email_verified=True,
                         )
                         user.set_unusable_password()
                         user.save()
@@ -177,8 +179,52 @@ class KakaoException(Exception):
 
 def kakao_callback(request):
     try:
-        code = request.get("code", None)
-        token_request = requests.get(f"https://kauth.kakao.com/oauth/token")
-
-    except KakaoException():
+        app_key = os.environ.get("KAKAO_KEY")
+        code = request.GET.get("code")
+        redirect_uri = "http://127.0.0.1:8000/users/login/kakao/callback"
+        token_request = requests.get(
+            f"https://kauth.kakao.com/oauth/token?grant_type=authorization_code&client_id={app_key}&redirect_uri={redirect_uri}&code={code}"
+        )
+        token_json = token_request.json()
+        # print(token_json.json())
+        error = token_json.get("error", None)
+        if error is not None:
+            raise KakaoException()
+        access_token = token_json.get("access_token")
+        profile_request = requests.get(
+            "https://kapi.kakao.com/v2/user/me",
+            headers={"Authorization": f"Bearer {access_token}"},
+        )
+        # print(profile_request.json())
+        profile_json = profile_request.json()
+        email = profile_json.get("kakao_account").get("email")
+        if email is None:
+            raise KakaoException()
+        nickname = profile_json.get("properties").get("nickname")
+        profile_image = profile_json.get("properties").get(
+            "profile_image"
+        )  # 이미지 가져와서 avater에 추가
+        try:
+            user = models.User.objects.get(email=email)
+            if user.login_method != models.User.LOGIN_KAKAO:
+                raise KakaoException()
+        except models.User.DoesNotExist:
+            user = models.User.objects.create(
+                email=email,
+                first_name=nickname,
+                login_method=models.User.LOGIN_KAKAO,
+                email_verified=True,
+                username=email,
+            )
+            user.set_unusable_password()
+            user.save()
+            if profile_image is not None:
+                print(profile_image)
+                photo_request = requests.get(profile_image)  # byte 값으로 가져오기
+                user.avatar.save(
+                    f"{nickname}-avatar", ContentFile(photo_request.content)
+                )  # bullshit파일을 django에서 처리하는 방법
+        login(request, user)
+        return redirect(reverse("core:home"))
+    except KakaoException:
         return redirect(reverse("users:login"))
