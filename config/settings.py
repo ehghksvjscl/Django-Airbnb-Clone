@@ -129,7 +129,7 @@ STATIC_URL = "/static/"
 AUTH_USER_MODEL = "users.User"
 
 # 위 두가지 Media 기능을 설정 하면 media/
-MEDIA_ROOT = os.path.join(BASE_DIR, "uploads")
+MEDIA_ROOT = os.path.join(BASE_DIR, "uploads")s
 MEDIA_URL = "/media/"
 
 # Email Configuration
