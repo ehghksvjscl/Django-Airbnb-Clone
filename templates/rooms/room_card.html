@@ -1,0 +1,11 @@
+<div class="w-1/4 mb-10 px-2">
+    <!-- <a href=" /rooms/{{room.pk}}">{{room.name}} / ${{room.price}</a> -->
+    <!-- <a href="{% url "rooms:detail" room.pk %}">
+        <img src="{{room.first_photo}}">
+        {{room.host.superhost}} {{room.name}} / ${{room.price}}
+    </a> -->
+    <!-- 이미지가 모서리가 둥글기 떄문에 div로 작성 -->
+    <div class="w-full h-64 bg-cover bg-center rounded-lg" style="background-image: url({{room.first_photo}});">
+
+    </div>
+</div>
