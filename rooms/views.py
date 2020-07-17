@@ -49,6 +49,8 @@ def all_rooms(request):
 
 # cbv
 # https://ccbv.co.uk/ 사이트에서 cbv 속성 값을 볼수 있다. 여러개의 클래스로 있기 떄문에..
+# 이처럼 선언을 하면 html에서 object list나 page_obj 이러한 변수를 사용할 수 있다 ex) room_list.html
+# ListView를 상속 받았기 때문에 room_list,html을 찾는다.
 class HomeView(ListView):
 
     """ HomeView Definition """
