@@ -124,12 +124,17 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
+# http://127.0.0.1:8000/static/css/styles.css 경로를 지정할 수 있다 밑에있는 static을 바꾸면 url이 바뀐다.
 STATIC_URL = "/static/"
+
+# css파일을 실제 경로를 나타낸다.
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
 
 AUTH_USER_MODEL = "users.User"
 
 # 위 두가지 Media 기능을 설정 하면 media/
-MEDIA_ROOT = os.path.join(BASE_DIR, "uploads")s
+MEDIA_ROOT = os.path.join(BASE_DIR, "uploads")
+
 MEDIA_URL = "/media/"
 
 # Email Configuration
