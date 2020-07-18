@@ -100,7 +100,7 @@ class Room(core_models.TimeStampedModel):
         self.city = str.capitalize(self.city)
         super().save(*args, **kwargs)
 
-    # Url 오버라이딩
+    # Url 오버라이딩 room 관리자 페이지에 바로가기 버튼이 만들어 진다.
     def get_absolute_url(self):
         return reverse("rooms:detail", kwargs={"pk": self.pk})
 

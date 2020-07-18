@@ -4,7 +4,7 @@ import requests
 from django.shortcuts import render, redirect, reverse
 from django.views import View
 from django.contrib.auth import authenticate, login, logout
-from django.views.generic import FormView
+from django.views.generic import FormView, DetailView
 from django.urls import reverse_lazy
 from django.core.files.base import ContentFile
 from django.contrib import messages  # 메시지 실험
@@ -227,3 +227,10 @@ def kakao_callback(request):
     except KakaoException as e:
         messages.error(request, e)
         return redirect(reverse("users:login"))
+
+
+class UserProfileView(DetailView):
+
+    model = models.User
+    # UserProfileView가 뷰에서 찾았던 유저에 의해서 유저를 대체하고 있는데 이를 쓰면 해결된다.
+    context_object_name = "user_obj"
