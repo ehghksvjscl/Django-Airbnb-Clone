@@ -7,6 +7,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.views.generic import FormView
 from django.urls import reverse_lazy
 from django.core.files.base import ContentFile
+from django.contrib import messages  # 메시지 실험
 
 from . import forms, models
 
@@ -172,6 +173,7 @@ class KakaoException(Exception):
 
 def kakao_callback(request):
     try:
+        raise KakaoException()
         app_key = os.environ.get("KAKAO_KEY")
         code = request.GET.get("code")
         redirect_uri = "http://127.0.0.1:8000/users/login/kakao/callback"
@@ -220,4 +222,5 @@ def kakao_callback(request):
         login(request, user)
         return redirect(reverse("core:home"))
     except KakaoException:
+        messages.error(request, "Somethings Error")
         return redirect(reverse("users:login"))
