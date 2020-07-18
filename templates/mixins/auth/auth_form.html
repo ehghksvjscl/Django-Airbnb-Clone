@@ -1,0 +1,42 @@
+<!-- <form action="{% url "users:signup" %}" method="post" class=" container"> -->
+<form method="post" class=" container">
+    {% csrf_token %}
+    <!-- {{form.as_p}} -->
+
+    <!-- 사용자가 에러에 대한 커스텀마이징 샘플 -->
+    {% if form.non_field.errrors %}
+    {% for error in form.non_field.errrors  %}
+    <span class="text-red-500 font-medium text-sm">{{error}}</span>
+    {% endfor %}
+    {% endif %}
+
+
+    {% for field in form  %}
+    {% include 'mixins/auth/form_input.html' with field=field %}
+    {% endfor %}
+
+    <!-- 
+    {{form.first_name}}
+    {{form.first_name.errors}}
+    {{form.last_name}}
+    {{form.last_name.errors}}
+    <div class="input has_error">
+        {{form.email}}
+        {% if form.email.errors %}
+        {% for error in form.email.errors  %}
+        <span class=" text-red-500 font-medium text-sm">{{error}}</span>
+        {% endfor %}
+        {% endif %}
+    </div>
+    {{form.password}}
+    {{form.password.errors}}
+    {{form.password1}}
+
+    {% if password1.errors %}
+    {% for error in password1.errors  %}
+    <span class="btn bg-red-500 text-white">{{error}}</span>
+    {% endfor %}
+    {% endif %}
+    {{form.password1.errors}} -->
+    <button class="btn bg-red-500 text-white">{{cta}}</button>
+</form>
