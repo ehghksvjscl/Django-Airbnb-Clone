@@ -34,6 +34,7 @@ class LoginView(View):
 
 
 def log_out(request):
+    messages.info(request, "안녕히 가세요.")
     logout(request)
     return redirect(reverse("core:home"))
 
