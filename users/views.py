@@ -4,7 +4,7 @@ import requests
 from django.shortcuts import render, redirect, reverse
 from django.views import View
 from django.contrib.auth import authenticate, login, logout
-from django.views.generic import FormView, DetailView
+from django.views.generic import FormView, DetailView, UpdateView
 from django.urls import reverse_lazy
 from django.core.files.base import ContentFile
 from django.contrib import messages  # 메시지 실험
@@ -235,3 +235,22 @@ class UserProfileView(DetailView):
     # UserProfileView가 뷰에서 찾았던 유저에 의해서 유저를 대체하고 있는데 이를 쓰면 해결된다.
     # 연결된 html에서 user와 user_obj를 쓸 수 있다.
     context_object_name = "user_obj"
+
+
+class UserUpdateProfile(UpdateView):
+    # UpdateView는 url에 pk가 있으면 찾아 오지만 현재 플젝에는 pk가 url에 포함 되어 있지 않기 때문에 get_object함수를 사용한다.
+    model = models.User
+    template_name = "users/update-profile.html"
+    fields = (
+        "first_name",
+        "last_name",
+        "avatar",
+        "gender",
+        "bio",
+        "birthdate",
+        "language",
+        "currency",
+    )
+
+    def get_object(self, queryset=None):
+        return self.request.user
