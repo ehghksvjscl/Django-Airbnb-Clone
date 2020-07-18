@@ -233,4 +233,5 @@ class UserProfileView(DetailView):
 
     model = models.User
     # UserProfileView가 뷰에서 찾았던 유저에 의해서 유저를 대체하고 있는데 이를 쓰면 해결된다.
+    # 연결된 html에서 user와 user_obj를 쓸 수 있다.
     context_object_name = "user_obj"
