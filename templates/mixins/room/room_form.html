@@ -1,0 +1,16 @@
+<form method="post" class=" container" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    {% if form.non_field.errrors %}
+    {% for error in form.non_field.errrors  %}
+    <span class="text-red-500 font-medium text-sm">{{error}}</span>
+    {% endfor %}
+    {% endif %}
+
+
+    {% for field in form  %}
+    {% include 'mixins/room/room_input.html' with field=field %}
+    {% endfor %}
+
+    <button class="btn bg-red-500 text-white">{{cta}}</button>
+</form>

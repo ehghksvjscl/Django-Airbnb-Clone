@@ -75,7 +75,7 @@ class RoomAdmin(admin.ModelAdmin):
         "country",
     )
 
-    search_fields = ("=city", "^host__username")
+    search_fields = ("=city", "^host__username", "=name")
 
     # 관리자 페널에서 id를 찾기 쉽게 만들어 준다.
     raw_id_fields = ("host",)

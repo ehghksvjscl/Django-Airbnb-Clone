@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.core.paginator import Paginator, EmptyPage
-from django.views.generic import ListView, DetailView, View
+from django.views.generic import ListView, DetailView, View, UpdateView
 from django.utils import timezone
 from django.urls import reverse
 from django.http import Http404
@@ -280,3 +280,28 @@ class SearchView(View):
 
 # 개고생 하는 방법
 # return render(request, "rooms/search.html", {**form, **choices, "rooms": rooms})
+
+
+class EditRoomView(UpdateView):
+
+    model = models.Room
+    template_name = "rooms/room_edit.html"
+    fields = (
+        "name",
+        "description",
+        "country",
+        "city",
+        "price",
+        "address",
+        "guests",
+        "beds",
+        "bedrooms",
+        "baths",
+        "check_in",
+        "check_out",
+        "instant_book",
+        "room_type",
+        "amenities",
+        "facilities",
+        "house_rules",
+    )
