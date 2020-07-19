@@ -8,14 +8,16 @@ from django.views.generic import FormView, DetailView, UpdateView
 from django.urls import reverse_lazy
 from django.core.files.base import ContentFile
 from django.contrib import messages  # 메시지 실험
+from django.contrib.auth.views import PasswordChangeView
+from django.contrib.messages.views import SuccessMessageMixin
 
-from . import forms, models
+from . import forms, models, mixins
 
 # CSRF는 Cross Site Request Forgery
 # 사이트 간 요청 위조
 
-
-class LoginView(View):
+# mixin은 로그인 데코레이터 기능을 한다.
+class LoginView(mixins.LoggedOutOnlyView, View):
     def get(self, request):
         form = forms.LoginForm(initial={"email": "test@google.com"})
         return render(request, "users/login.html", {"form": form})
@@ -31,6 +33,13 @@ class LoginView(View):
                 login(request, user)
                 return redirect(reverse("core:home"))
         return render(request, "users/login.html", {"form": form})
+
+    def get_success_url(self):
+        next_arg = self.request.GET.get("next")
+        if next_arg is not None:
+            return next_arg
+        else:
+            return reverse("core:home")
 
 
 def log_out(request):
@@ -55,7 +64,7 @@ class LoginViewEZ(FormView):
         return super().form_valid(form)
 
 
-class SignUpView(FormView):
+class SignUpView(mixins.LoggedOutOnlyView, FormView):
     template_name = "users/signup.html"
     form_class = forms.SignUpForm
     success_url = reverse_lazy("core:home")
@@ -237,20 +246,57 @@ class UserProfileView(DetailView):
     context_object_name = "user_obj"
 
 
-class UserUpdateProfile(UpdateView):
+# 성공시 메시지 SuccessMesageMixin
+class UserUpdateProfile(mixins.LoggedInOnlyView, SuccessMessageMixin, UpdateView):
     # UpdateView는 url에 pk가 있으면 찾아 오지만 현재 플젝에는 pk가 url에 포함 되어 있지 않기 때문에 get_object함수를 사용한다.
     model = models.User
     template_name = "users/update-profile.html"
     fields = (
+        "email",
         "first_name",
         "last_name",
-        "avatar",
         "gender",
         "bio",
-        "birthdate",
         "language",
         "currency",
     )
 
+    success_message = "개인정보 변경 완료"
+
     def get_object(self, queryset=None):
         return self.request.user
+
+    # 저장을 누를 때 인터셉트 해서 가져올 수 있음.
+    def form_valid(self, form):
+        email = form.cleaned_data.get("email")
+        self.object.username = email
+        self.object.save()
+        return super().form_valid(form)
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class=form_class)
+        form.fields["first_name"].widget.attrs = {"placeholder": "First Nmae"}
+        return form
+
+
+class UpdatePassword(
+    mixins.LoggedInOnlyView,
+    mixins.EmailLoginOnlyVeiw,
+    SuccessMessageMixin,
+    PasswordChangeView,
+):
+
+    template_name = "users/update-password.html"
+    success_message = "비밀번호 변경 완료"
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class=form_class)
+        form.fields["old_password"].widget.attrs = {"placeholder": "Current password"}
+        form.fields["new_password1"].widget.attrs = {"placeholder": "New password"}
+        form.fields["new_password2"].widget.attrs = {
+            "placeholder": "Confirm new password"
+        }
+        return form
+
+    def get_success_url(self):
+        return self.request.user.get_absolute_url()

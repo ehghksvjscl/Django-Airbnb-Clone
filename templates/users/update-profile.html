@@ -10,8 +10,13 @@ Update Profile
 {% block content %}
 <div class=" container lg:w-5/12 md:w-1/2 xl:w-1/4 mx-auto my-10 flex flex-col items-center border p-6 border-gray-500">
     {% include 'mixins/auth/auth_form.html' with form=form cta="Update Profile" %}
+
+
+    {% if object.login_method == "email" %}
     <div class="mt-4 flex justify-center items-center">
-        <a href="#" class=" ml-4 text-teal-500 font-medium">Change Password</a>
+        <a href="{% url "users:password" %}" class=" ml-4 text-teal-500 font-medium">Change Password</a>
     </div>
+    {% endif %}
+
 </div>
 {% endblock content %}
