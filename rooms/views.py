@@ -5,6 +5,7 @@ from django.utils import timezone
 from django.urls import reverse
 from django.http import Http404
 from django_countries import countries
+from users import mixins as user_mixins
 from . import models, forms
 from math import ceil  # 올림하는 함수
 
@@ -282,7 +283,7 @@ class SearchView(View):
 # return render(request, "rooms/search.html", {**form, **choices, "rooms": rooms})
 
 
-class EditRoomView(UpdateView):
+class EditRoomView(user_mixins.LoggedInOnlyView, UpdateView):
 
     model = models.Room
     template_name = "rooms/room_edit.html"
@@ -305,3 +306,21 @@ class EditRoomView(UpdateView):
         "facilities",
         "house_rules",
     )
+
+    def get_object(self, queryset=None):
+        room = super().get_object(queryset=queryset)
+        if room.host.pk != self.request.user.pk:
+            raise Http404()
+        return room
+
+
+class RoomPhotoView(user_mixins.LoggedInOnlyView, DetailView):
+
+    model = models.Room
+    template_name = "room_photos.html"
+
+    def get_object(self, queryset=None):
+        room = super().get_object(queryset=queryset)
+        if room.host.pk != self.request.user.pk:
+            raise Http404()
+        return room
