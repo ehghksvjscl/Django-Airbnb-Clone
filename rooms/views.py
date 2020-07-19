@@ -363,7 +363,7 @@ class EditPhotoView(user_mixins.LoggedInOnlyView, SuccessMessageMixin, UpdateVie
 
 class AddPhotoView(user_mixins.LoggedInOnlyView, FormView):
 
-    model = models.Photo
+    # model = models.Photo
     template_name = "rooms/photo_create.html"
     form_class = forms.CreatePhotoForm  # 폼을 바꿀때 유용한 FormView상속
     success_message = "사진 등록 완료"
@@ -375,3 +375,20 @@ class AddPhotoView(user_mixins.LoggedInOnlyView, FormView):
         form.save(pk)
         messages.success(self.request, "사진 등록 완료")
         return redirect(reverse("rooms:photos", kwargs={"pk": pk}))
+
+
+class CreateRoomView(user_mixins.LoggedInOnlyView, FormView):
+
+    form_class = forms.CreateRoomForm
+    template_name = "rooms/room_create.html"
+
+    def form_valid(self, form):
+        print(self.request.user)
+        room = form.save()
+        print(room)
+        room.host = self.request.user
+        room.save()
+        # ManyToMany를 저장하는 방법
+        form.save_m2m()  # save_m2m은 오브젝트를 저장 한 후 호출해야 한다.
+        messages.success(self.request, "방 생성 완료")
+        return redirect(reverse("rooms:detail", kwargs={"pk": room.pk}))
