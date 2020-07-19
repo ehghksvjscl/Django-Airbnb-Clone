@@ -7,6 +7,8 @@ from django_countries import countries
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from users import mixins as user_mixins
+from django.contrib.messages.views import SuccessMessageMixin
+
 from . import models, forms
 from math import ceil  # 올림하는 함수
 
@@ -343,3 +345,17 @@ def delete_photo(request, room_pk, photo_pk):
         return redirect(reverse("rooms:photos", kwargs={"pk": room_pk}))
     except models.Room.DoesNotExist:
         redirect(reversed("core:home"))
+
+
+class EditPhotoView(user_mixins.LoggedInOnlyView, SuccessMessageMixin, UpdateView):
+
+    model = models.Photo
+    template_name = "rooms/photo_edit.html"
+    pk_url_kwarg = "photo_pk"
+    fields = ("caption",)
+    success_message = "사진 정보 변경 완료"
+
+    # url에서 room_pk를 찾아서 room.pk를 얻는 방법 예시
+    def get_success_url(self):
+        room_pk = self.kwargs.get("room_pk")
+        return reverse("rooms:photos", kwargs={"pk": room_pk})

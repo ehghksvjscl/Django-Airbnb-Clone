@@ -16,10 +16,13 @@ Room Photos
             <span class=" ml-5 text-lg">{{photo.caption}}</span>
         </div>
         <div class="flex flex-col w-1/5">
-            <a class="btn-link w-full bg-teal-400" href="#">Edit</a>
+            <a class="btn-link w-full bg-teal-400" href="{% url 'rooms:edit-photo' room.pk photo.pk %}">Edit</a>
             <a class="btn-link w-full" href="{% url 'rooms:delete-photo' room.pk photo.pk %}">Delete</a>
         </div>
     </div>
     {% endfor %}
+    <div class=" flex justify-center items-center mt-4">
+        <a href="{% url 'rooms:edit' room.pk %}" class=" font-medium text-xl text-teal-500">방 정보 수정</a>
+    </div>
 </div>
 {% endblock content %}
