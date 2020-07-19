@@ -146,3 +146,7 @@ EMAIL_USE_SSL = True
 EMAIL_HOST_USER = os.environ.get("MAILGUN_USERNAME")
 EMAIL_HOST_PASSWORD = os.environ.get("MAILGUN_PASSWORD")
 EMAIL_FROM = "sexy-guy@sandbox9891f38734f74490b5bcbff54dbee85c.mailgun.org"
+
+# Auth
+
+LOGIN_URL = "/users/login"

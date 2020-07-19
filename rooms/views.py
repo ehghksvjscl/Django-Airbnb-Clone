@@ -1,10 +1,11 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, reverse
 from django.core.paginator import Paginator, EmptyPage
 from django.views.generic import ListView, DetailView, View, UpdateView
 from django.utils import timezone
-from django.urls import reverse
 from django.http import Http404
 from django_countries import countries
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from users import mixins as user_mixins
 from . import models, forms
 from math import ceil  # 올림하는 함수
@@ -307,6 +308,7 @@ class EditRoomView(user_mixins.LoggedInOnlyView, UpdateView):
         "house_rules",
     )
 
+    # get_object는 cbv에서 쓰인다 우리는 model에 던지는건 Room 정보이지 Room의 어느 객체인지 모른다.
     def get_object(self, queryset=None):
         room = super().get_object(queryset=queryset)
         if room.host.pk != self.request.user.pk:
@@ -324,3 +326,20 @@ class RoomPhotoView(user_mixins.LoggedInOnlyView, DetailView):
         if room.host.pk != self.request.user.pk:
             raise Http404()
         return room
+
+
+@login_required
+def delete_photo(request, room_pk, photo_pk):
+    # print(f"Should delete {photo_pk} from {room_pk}")
+    user = request.user
+    try:
+        room = models.Room.objects.get(pk=room_pk)
+        if room.host.pk != user.pk:
+            messages.error(request, "사진을 지울 수 없습니다.")
+        else:
+            print(room_pk, user.pk)
+            models.Photo.objects.filter(pk=photo_pk).delete()
+            messages.success(request, "사진 삭제 완료")
+        return redirect(reverse("rooms:photos", kwargs={"pk": room_pk}))
+    except models.Room.DoesNotExist:
+        redirect(reversed("core:home"))

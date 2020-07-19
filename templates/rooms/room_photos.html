@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block page_name %}
-Update Profile
+Room Photos
 {% endblock page_name %}
 
 {% block search-bar %}
@@ -17,7 +17,7 @@ Update Profile
         </div>
         <div class="flex flex-col w-1/5">
             <a class="btn-link w-full bg-teal-400" href="#">Edit</a>
-            <a class="btn-link w-full" href="#">Delete</a>
+            <a class="btn-link w-full" href="{% url 'rooms:delete-photo' room.pk photo.pk %}">Delete</a>
         </div>
     </div>
     {% endfor %}
