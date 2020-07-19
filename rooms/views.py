@@ -366,8 +366,12 @@ class AddPhotoView(user_mixins.LoggedInOnlyView, FormView):
     model = models.Photo
     template_name = "rooms/photo_create.html"
     form_class = forms.CreatePhotoForm  # 폼을 바꿀때 유용한 FormView상속
+    success_message = "사진 등록 완료"
 
     # form에는 kwargs가 없기때문에 save 메소드에서 room pk를 가져올 수 없다 따라서 form_valid를 통해 save메소드를 호출 하는 과정
+    # SuccessMessageMixin는 form_valid가 선언될시 사용할수 없으므로 만들걸 사용하자.
     def form_valid(self, form):
         pk = self.kwargs.get("pk")
         form.save(pk)
+        messages.success(self.request, "사진 등록 완료")
+        return redirect(reverse("rooms:photos", kwargs={"pk": pk}))
