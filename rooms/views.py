@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, reverse
 from django.core.paginator import Paginator, EmptyPage
-from django.views.generic import ListView, DetailView, View, UpdateView
+from django.views.generic import ListView, DetailView, View, UpdateView, FormView
 from django.utils import timezone
 from django.http import Http404
 from django_countries import countries
@@ -359,3 +359,15 @@ class EditPhotoView(user_mixins.LoggedInOnlyView, SuccessMessageMixin, UpdateVie
     def get_success_url(self):
         room_pk = self.kwargs.get("room_pk")
         return reverse("rooms:photos", kwargs={"pk": room_pk})
+
+
+class AddPhotoView(user_mixins.LoggedInOnlyView, FormView):
+
+    model = models.Photo
+    template_name = "rooms/photo_create.html"
+    form_class = forms.CreatePhotoForm  # 폼을 바꿀때 유용한 FormView상속
+
+    # form에는 kwargs가 없기때문에 save 메소드에서 room pk를 가져올 수 없다 따라서 form_valid를 통해 save메소드를 호출 하는 과정
+    def form_valid(self, form):
+        pk = self.kwargs.get("pk")
+        form.save(pk)

@@ -27,3 +27,14 @@ class SearchForm(forms.Form):
         widget=forms.CheckboxSelectMultiple,
         required=False,
     )
+
+
+class CreatePhotoForm(forms.ModelForm):
+    class Meta:
+        model = models.Photo
+        fields = ("caption", "file")
+
+    # 해당 함수 호출은 view에서 form_valied함수에 의해 호출 됩니다.
+    def save(self, pk, *args, **kwargs):
+        photo = super().save(commit=False)
+        room_pk = models.Room.objects.get(pk=pk)
