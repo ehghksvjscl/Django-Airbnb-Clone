@@ -139,6 +139,6 @@ class Room(core_models.TimeStampedModel):
             return f"{self.beds} beds"
 
     def get_calendars(self):
-        calendar = Calendar(2020, 7)
-        print(calendar.get_month())
-        return False
+        this_month = Calendar(2020, 7)
+        next_month = Calendar(2020, 8)
+        return [this_month, next_month]
