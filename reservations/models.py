@@ -1,3 +1,4 @@
+import datetime
 from django.db import models
 from django.utils import timezone
 from core import models as core_models
@@ -57,8 +58,13 @@ class Reservation(core_models.TimeStampedModel):
             end = self.check_out
             difference = end - start
             existing_booked_day = BookedDay.objects.filter(day__range=(start,end)).exists()
-            if existing_booked_day == False:
-                pass
+            if not existing_booked_day:
+                super().save(*args,**kwargs)
+                for i in range(difference.days + 1):
+                    BookedDay.objects.create(
+                        day=start + datetime.timedelta(days=i),
+                        reservation=self
+                    )
         else:
             print("Im old")
             return super().save(*args, **kwargs)
