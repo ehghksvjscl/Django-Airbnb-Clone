@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load sexy_capitals %}
 {% block page_name %}Detail{% endblock page_name %}
 
 {% block content %}
@@ -96,6 +96,7 @@
 
         {% for calendar in room.get_calendars %}
         <div class="mb-20">
+            {{"something"|sexy_capitals}}
             <span class=" text-content font-medium text-lg flex mb-8 mt-8 justify-center content-center">{{calendar.get_month}}/{{calendar.year}}</span>
             <div class="cal-grid mb-4 font-semibold">
                 {% for day in calendar.day_name %}
