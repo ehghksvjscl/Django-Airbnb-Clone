@@ -65,7 +65,7 @@ class LoginViewEZ(FormView):
         return super().form_valid(form)
 
 
-class SignUpView(mixins.LoggedOutOnlyView, FormView):
+class SignUpView(FormView):
     template_name = "users/signup.html"
     form_class = forms.SignUpForm
     success_url = reverse_lazy("core:home")
