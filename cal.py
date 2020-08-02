@@ -1,7 +1,15 @@
 # import calendar하려면 이름이 carendar.py로 해서는 안된다.
+from django.utils import timezone
 import calendar
 
+class Day:
+    def __init__(self, number, past):
+        self.number = number
+        self.past = past
 
+    def __str__(self):
+        return str(self.number)
+    
 class Calendar(calendar.Calendar):
     def __init__(self, year, month):
         super().__init__(firstweekday=6)
@@ -36,7 +44,15 @@ class Calendar(calendar.Calendar):
         days = []
         for week in weeks:
             for day, _ in week:
-                days.append(day)
+                now = timezone.now()
+                today = now.day
+                month = now.month
+                past = False
+                if month <= self.month:
+                    if day < today:
+                        past = True
+                new_day =Day(day,past)
+                days.append(new_day)
         return days
 
     def get_month(self):
