@@ -9,6 +9,10 @@ class BookedDay(core_models.TimeStampedModel):
 
     class Meta:
         verbose_name = "Booked Day"
+        verbose_name_plural = "Booked Days"
+
+    def __str__(self):
+        return str(self.day)
 
 class Reservation(core_models.TimeStampedModel):
 
@@ -53,7 +57,7 @@ class Reservation(core_models.TimeStampedModel):
     is_finished.boolean = True
 
     def save(self, *args, **kwargs):
-        if self.pk is None:
+        if True:
             start = self.check_in
             end = self.check_out
             difference = end - start

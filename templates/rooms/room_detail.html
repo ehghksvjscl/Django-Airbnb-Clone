@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load sexy_capitals %}
+{% load is_booked %}
 {% block page_name %}Detail{% endblock page_name %}
 
 {% block content %}
@@ -96,7 +96,6 @@
 
         {% for calendar in room.get_calendars %}
         <div class="mb-20">
-            {{"something"|sexy_capitals}}
             <span class=" text-content font-medium text-lg flex mb-8 mt-8 justify-center content-center">{{calendar.get_month}}/{{calendar.year}}</span>
             <div class="cal-grid mb-4 font-semibold">
                 {% for day in calendar.day_name %}
@@ -105,13 +104,16 @@
             </div>
             <div class="cal-grid">
                 {% for day in calendar.get_days  %}
+                {% is_booked room day as is_booked_bool %}
                     {% if day.number != 0 %}
                     
-                    {% if day.past %}
-                        <span class=" rounded bg-gray-200 w-full text-center p1 text-gray-300">{{day}}</span>
-                    {% else %}
-                        <span class=" bg-gray-200 text-center rounded text-gray-700 hover:bg-green-400 hover:text-white hover:font-medium cursor-pointer">{{day}}</span>
-                    {% endif %}
+                        {% if day.past %}
+                            <span class=" rounded bg-gray-200 w-full text-center p1 text-gray-300">{{day}}</span>
+                        {% elif is_booked_bool %}
+                            <span class=" rounded bg-gray-200 w-full text-center p1 text-gray-300 line-through">{{day}}</span>
+                        {% else %}
+                            <span class=" bg-gray-200 text-center rounded text-gray-700 hover:bg-green-400 hover:text-white hover:font-medium cursor-pointer">{{day}}</span>
+                        {% endif %}
                         
                     {% else %}
                         <span></span>
